@@ -1,5 +1,6 @@
 # Configuration files (contains API keys)
 config/config.php
+config/local.php
 
 # Generated content and temporary files
 temp_files/
@@ -8,28 +9,52 @@ logs/
 
 # Log files
 *.log
+error_log
+php_debug.log
 
 # Environment files
 .env
 .env.local
+
+# Development and build files
+node_modules/
+dist/
+build/
 
 # IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
+*.sublime-*
 
 # OS files
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # PHP specific
 vendor/
 composer.lock
+composer.phar
 
 # Cache files (if implemented)
 cache/
+*.cache
 
 # Backup files
 *.bak
 *.backup
+*.tmp
+*~
+
+# Documentation drafts and temporary files
+*.draft
+*.temp
+README_*.md
+
+# Development notes and assessments
+QUALITY_ASSESSMENT.md
+REORGANIZATION.md
+PATH_UPDATES.md
+WEB_HOSTING_SUMMARY.md
