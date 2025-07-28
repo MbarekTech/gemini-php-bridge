@@ -1,11 +1,36 @@
-# Security rules for Gemini AI Integration
+# Security rules for Gemini PHP Bridge
 
-# Deny access to configuration files
+# Protect sensitive directories
+<Directory "config">
+    Require all denied
+</Directory>
+
+<Directory ".git">
+    Require all denied
+</Directory>
+
+<Directory "logs">
+    Require all denied
+</Directory>
+
+# Deny access to sensitive files
 <Files "config.php">
     Require all denied
 </Files>
 
 <Files "*.log">
+    Require all denied
+</Files>
+
+<Files "*.bak">
+    Require all denied
+</Files>
+
+<Files "*.backup">
+    Require all denied
+</Files>
+
+<Files ".env">
     Require all denied
 </Files>
 
@@ -30,8 +55,9 @@
 
 # Security headers
 Header always set X-Content-Type-Options nosniff
-Header always set X-Frame-Options DENY
+Header always set X-Frame-Options SAMEORIGIN
 Header always set X-XSS-Protection "1; mode=block"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
 
 # Optional: Force HTTPS (uncomment if you have SSL)
 # RewriteEngine On
@@ -41,6 +67,12 @@ Header always set X-XSS-Protection "1; mode=block"
 # Prevent directory browsing
 Options -Indexes
 
+# Error document for security
+ErrorDocument 403 "Access Denied"
+ErrorDocument 404 "Not Found"
+
 # Limit file upload size (adjust as needed)
 php_value upload_max_filesize 10M
 php_value post_max_size 10M
+php_value max_execution_time 300
+php_value memory_limit 256M
