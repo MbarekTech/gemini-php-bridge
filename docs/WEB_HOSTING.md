@@ -1,53 +1,64 @@
-# Web Hosting Deployment Guide
+# Web Hosting Guide
 
-## 🌐 Hosting the Gemini AI Integration
+## Server Requirements
 
-This guide explains how to deploy and use the Gemini AI Integration on a web server for remote execution.
+- PHP 7.4+ with cURL extension
+- File upload enabled
+- Writable directories: temp_files, logs, output
 
-## 📁 Required Files for Web Hosting
-
-### Core Files (Required)
+## File Structure
 ```
 /
-├── api.php                    # Main API endpoint
-├── index.php                  # Legacy endpoint (optional)
-├── setup.ps1                  # Remote setup script
-├── config/
-│   ├── config.example.php     # Configuration template
-│   └── config.php            # Your actual config (create from template)
+├── gemini-api.php           # Main API endpoint
+├── simple-client.php        # PowerShell client
+├── get-client.php          # Client proxy
+├── status.php              # Health check
+├── index.php               # Entry point
 ├── client/
-│   └── gemini-client.ps1     # PowerShell client
-├── temp_files/               # Writable directory for uploads
-├── logs/                     # Writable directory for logs
-└── .htaccess                 # Optional: Security rules
+│   └── gemini-bridge.ps1   # Full PowerShell client
+├── temp_files/             # Upload directory
+├── logs/                   # Log directory
+└── .htaccess               # Security rules
 ```
 
-### Optional Files
-- `README.md` - Documentation
-- `LICENSE` - License file
-- `unused/` - Not needed for web hosting
+## Setup
 
-## 🔧 Server Configuration
+### 1. Configuration
+Edit `gemini-api.php`:
+```php
+define('GOOGLE_API_KEY', 'your-api-key-here');
+```
 
-### PHP Requirements
-- PHP 7.4 or higher
-- cURL extension enabled
-- File upload enabled (`file_uploads = On`)
-- Adequate memory limit (`memory_limit = 256M`)
-- Execution time limit (`max_execution_time = 300`)
-
-### Directory Permissions
+### 2. Permissions
 ```bash
-chmod 755 temp_files logs config
-chmod 644 *.php *.ps1
-chmod 600 config/config.php  # Secure the config file
+chmod 755 temp_files logs output
+chmod 644 *.php
 ```
 
-### Apache .htaccess (Optional Security)
+### 3. Test Deployment
+```bash
+curl -X POST https://yourdomain.com/gemini-api.php -d "test=true"
+```
+
+## Security
+
+### .htaccess Protection
 ```apache
-# Deny access to sensitive files
-<Files "config.php">
+# Protect sensitive files
+<Files "*.log">
     Require all denied
+</Files>
+
+# Enable PowerShell script headers
+<Files "*.ps1">
+    Header set Content-Type "text/plain"
+</Files>
+```
+
+### PHP Configuration
+- Set appropriate upload limits
+- Enable error logging
+- Disable dangerous functions if needed
 </Files>
 
 <Files "*.log">

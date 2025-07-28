@@ -1,230 +1,115 @@
 # Gemini PHP Bridge
 
-A professional PHP web service that conn```powershell
-# 🆕 SIMPLE METHOD (Recommended - works with any security!)
-irm 'https://yourdomain.com/simple-client.php?test=1' | iex
-irm 'https://yourdomain.com/simple-client.php?text=Explain quantum computing' | iex
-
-# Easy function wrapper
-function AI { param([string]$prompt); irm "https://yourdomain.com/simple-client.php?text=$prompt" | iex }
-AI "Write a Python hello world"
-
-# Direct API Function (most reliable for scripts)
-function Invoke-GeminiAI { 
-    param([string]$Text)
-    $response = Invoke-WebRequest -Uri "https://yourdomain.com/gemini-api.php" -Method POST -Body $Text -ContentType "text/plain"
-    ($response.Content | ConvertFrom-Json).candidates[0].content.parts[0].text
-}
-Invoke-GeminiAI "Create a simple HTML page"
-```Gemini AI API. Upload text files or send content directly to get AI-generated responses. Built for easy web deployment and one-line remote execution.
+A PHP web service for Google's Gemini AI API with PowerShell client support.
 
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-777BB4?logo=php)](https://php.net)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-## What it does
+## Features
 
-- Process text files and documents with Google's Gemini AI
-- Run PowerShell commands remotely without installation
-- Handle file uploads (text, PDF, markdown)
-- Provide REST API endpoints for integration
-- Work across Windows, Linux, and macOS
+- REST API for Gemini AI integration
+- PowerShell client for remote execution  
+- File upload support (TXT, PDF, DOCX, MD)
+- Cross-platform compatibility
+- Rate limiting and security controls
 
-## Getting started
+## Quick Start
 
-### For web hosting (recommended)
-
-1. **Edit the API key** in these files:
-   - `gemini-api.php` (line 11): `$GOOGLE_API_KEY = "your-key-here";`
-   - `client/gemini-bridge.ps1` (line 16): `$GOOGLE_API_KEY = "your-key-here";`
-   - `client/gemini-bridge.ps1` (line 15): Update domain URL
-
-2. **Upload files** to your web server
-
-3. **Set folder permissions**:
-   ```bash
-   chmod 755 temp_files logs output
-   ```
-
-4. **Test it works**:
-   ```bash
-   curl -X POST https://yourdomain.com/gemini-api.php -d "test=true"
-   ```
-
-That's it. Users can now run commands like:
-
+**PowerShell (One-liner):**
 ```powershell
-# 🚀 SIMPLE ONE-LINER (Works with security layers!)
-irm 'https://yourdomain.com/simple-client.php?text=Create a Python web scraper' | iex
-
-# Test connection  
-irm 'https://yourdomain.com/simple-client.php?test=1' | iex
-
-# Create a simple AI function
-function AI { param([string]$prompt); irm "https://yourdomain.com/simple-client.php?text=$prompt" | iex }
-AI "Write a JavaScript function"
+irm 'https://yourdomain.com/simple-client.php?text=Your question here' | iex
 ```
 
-### For local development
-
+**API (Direct):**
 ```bash
-git clone https://github.com/MbarekTech/gemini-php-bridge.git
-cd gemini-php-bridge
-# Edit config files with your API key
-php -S localhost:8000
+curl -X POST "https://yourdomain.com/gemini-api.php" -d "Your question here"
 ```
 
-## How to use it
+**Setup:**
+1. Add your Google API key to `gemini-api.php` (line 13)
+2. Upload files to web server
+3. Set permissions: `chmod 755 temp_files logs output`
 
-### PowerShell (Windows/Linux/macOS)
+## Usage
 
+**PowerShell:**
 ```powershell
-# 🆕 SIMPLE METHOD (Recommended - works with any security!)
-irm 'https://yourdomain.com/simple-client.php?test=1' | iex
-irm 'https://yourdomain.com/simple-client.php?text=Explain quantum computing' | iex
-
-# Easy function wrapper
+# Simple function
 function AI { param([string]$prompt); irm "https://yourdomain.com/simple-client.php?text=$prompt" | iex }
-AI "Write a Python hello world"
+AI "Write a Python function"
 
-# Direct API Function (most reliable for scripts)
+# Direct API call
 function Invoke-GeminiAI { 
     param([string]$Text)
     $response = Invoke-WebRequest -Uri "https://yourdomain.com/gemini-api.php" -Method POST -Body $Text -ContentType "text/plain"
     ($response.Content | ConvertFrom-Json).candidates[0].content.parts[0].text
 }
-Invoke-GeminiAI "Create a simple HTML page"
 ```
 
-### Direct API calls
-
+**cURL:**
 ```bash
-# Test
-curl -X POST https://yourdomain.com/gemini-api.php -d "test=true"
+# Text query
+curl -X POST "https://yourdomain.com/gemini-api.php" -d "Your question"
 
-# Send text
-curl -X POST https://yourdomain.com/gemini-api.php \
-  -H "Content-Type: text/plain" \
-  -d "Write a JavaScript function to sort an array"
-
-# Upload file
-curl -X POST https://yourdomain.com/gemini-api.php \
-  -F "textFile=@document.txt"
+# File upload
+curl -X POST "https://yourdomain.com/gemini-api.php" -F "textFile=@file.txt"
 ```
 
-### Browser bookmark
+**Python:**
+```python
+import requests
 
-Create a bookmark with this JavaScript to process selected text:
-
-```javascript
-javascript:(function(){
-    var text = window.getSelection().toString() || prompt('Enter text:');
-    if(text) {
-        var cmd = 'irm https://yourdomain.com/client/gemini-bridge.ps1 | iex -InputText "' + text + '"';
-        navigator.clipboard.writeText(cmd);
-        alert('Command copied! Paste in PowerShell.');
-    }
-})();
-```
-
-## File structure
-
-```
-gemini-php-bridge/
-├── gemini-api.php          # Main API endpoint
-├── api.php                 # API redirect (for compatibility)
-├── index.php              # Legacy endpoint  
-├── status.php             # Health check endpoint
-├── client/
-│   └── gemini-bridge.ps1   # PowerShell client
-├── temp_files/            # File uploads (create manually)
-├── logs/                  # Request logs (create manually)
-├── output/                # Generated outputs (create manually)
-├── config/                # Config templates (optional)
-├── docs/                  # Documentation
-└── .htaccess             # Web server security
+def ask_ai(question):
+    response = requests.post('https://yourdomain.com/gemini-api.php', data=question)
+    return response.json()['candidates'][0]['content']['parts'][0]['text']
 ```
 
 ## Configuration
 
-The API key is embedded directly in the script files for simplicity. For development, you can also use the config files in the `config/` folder.
-
-**Main settings** (in gemini-api.php):
-- Google API key
-- Model parameters (temperature, max tokens)
-- File upload limits
-- Logging preferences
-
-**Client settings** (in gemini-bridge.ps1):
-- Default API URL
-- Output directory
-- Logging preferences
-
-## API reference
-
-### POST /gemini-api.php
-
-**Parameters:**
-- `textFile`: Upload a text file
-- `pdfFile`: Upload a PDF
-- `test=true`: Test connection
-- Raw POST body: Direct text input
-
-**Response:**
-```json
-{
-  "candidates": [
-    {
-      "content": {
-        "parts": [
-          {
-            "text": "AI response here"
-          }
-        ]
-      }
-    }
-  ]
-}
+Edit `gemini-api.php`:
+```php
+$config = [
+    'generation' => [
+        'temperature' => 1,        // Creativity (0-2)
+        'maxOutputTokens' => 8192  // Response length
+    ],
+    'security' => [
+        'rate_limit_requests_per_minute' => 60,  // Rate limiting
+        'max_input_length' => 100000,            // Input size limit
+    ]
+];
 ```
 
-**Error response:**
-```json
-{
-  "error": "Error message",
-  "httpCode": 400
-}
-```
-
-## Security notes
-
-- API key is stored server-side, users never see it
-- File uploads are validated and cleaned up
-- Consider rate limiting for production use
-- Use HTTPS in production
-- Monitor the logs for abuse
+**Limits:**
+- Rate limit: 60 requests/minute per IP
+- File size: 10MB max
+- Input text: 100,000 characters max
+- Supported files: .txt, .pdf, .docx, .md
 
 ## Troubleshooting
 
-**PowerShell execution policy error:**
+**PowerShell execution policy:**
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
-**File upload issues:**
-- Check PHP upload limits in php.ini
-- Verify folder permissions (755 for directories)
-- Check available disk space
+**File uploads:**
+- Check PHP limits in php.ini: `upload_max_filesize`, `post_max_size`
+- Verify permissions: 755 for directories, 644 for files
+- Ensure file extension is allowed: .txt, .pdf, .docx, .md
 
-**API connection problems:**
-- Verify your Google API key is valid
-- Check firewall/proxy settings
-- Test with curl first
+**API issues:**
+- Verify Google API key is valid
+- Check logs in `logs/gemini_api.log`
+- Test with: `curl -X POST url -d "test=true"`
+
+## Requirements
+
+- PHP 7.4+ with cURL and JSON extensions
+- Google Cloud API key with Gemini API access
+- Web server with file upload support
 
 ## Development
-
-**Requirements:**
-- PHP 7.4+
-- cURL extension
-- Google Cloud API key
 
 **Local testing:**
 ```bash
@@ -232,29 +117,12 @@ php -S localhost:8000
 curl -X POST http://localhost:8000/gemini-api.php -d "test=true"
 ```
 
-**Adding features:**
-- Edit `gemini-api.php` for server-side changes
-- Edit `client/gemini-bridge.ps1` for client features
-- Use the `config/` templates for complex setups
-
-## Contributing
-
-1. Fork the repo
-2. Make your changes
-3. Test locally
-4. Submit a pull request
-
 ## License
 
 MIT License - see [LICENSE](LICENSE) file.
 
-## More info
+## Documentation
 
-- [Simple setup guide](docs/SIMPLE_SETUP.md) - Quick deployment
-- [Web hosting guide](docs/WEB_HOSTING.md) - Detailed deployment
-- [Bookmarklet guide](docs/BOOKMARKLET.md) - Browser integration
-- [Google AI docs](https://ai.google.dev/docs) - API reference
-
----
-
-Built for developers who want AI integration without the complexity.
+- [Alternative Access Methods](docs/ALTERNATIVE_ACCESS.md)
+- [Web Hosting Guide](docs/WEB_HOSTING.md)
+- [Deployment Guide](docs/DEPLOYMENT.md)

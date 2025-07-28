@@ -1,42 +1,38 @@
-# Simple Setup Guide for Web Hosting
+# Simple Setup Guide
 
-## 🚀 Quick Deployment
+## Quick Deployment
 
-### 1. **Update API Key**
-Edit these files with your Google API key:
-
-**In `api.php` (line 11):**
+### 1. Update API Key
+Edit `gemini-api.php` (line 13):
 ```php
-$GOOGLE_API_KEY = "YOUR_ACTUAL_GOOGLE_API_KEY_HERE";
+define('GOOGLE_API_KEY', 'your-actual-google-api-key-here');
 ```
 
-**In `client/gemini-client.ps1` (line 14):**
-```powershell
-$GOOGLE_API_KEY = "YOUR_ACTUAL_GOOGLE_API_KEY_HERE"
-```
+### 2. Upload Files
+Upload all files to your web server maintaining directory structure.
 
-**In `client/gemini-client.ps1` (line 13):**
-```powershell
-$DEFAULT_API_URL = "https://yourdomain.com/api.php"  # Update with your actual domain
-```
-
-### 2. **Upload to Web Server**
-Upload all files to your web server maintaining the directory structure.
-
-### 3. **Set Permissions**
+### 3. Set Permissions
 ```bash
 chmod 755 temp_files logs output
-chmod 644 *.php *.ps1
+chmod 644 *.php
 ```
 
-### 4. **Test**
+### 4. Test
 ```bash
-curl -X POST https://yourdomain.com/api.php -d "test=true"
+curl -X POST https://yourdomain.com/gemini-api.php -d "test=true"
 ```
 
-## ✅ **Ready to Use!**
+## Usage
 
-Users can now execute with simple one-liners:
+**PowerShell one-liner:**
+```powershell
+irm 'https://yourdomain.com/simple-client.php?text=Your question' | iex
+```
+
+**API call:**
+```bash
+curl -X POST "https://yourdomain.com/gemini-api.php" -d "Your question"
+```
 
 ```powershell
 # Test

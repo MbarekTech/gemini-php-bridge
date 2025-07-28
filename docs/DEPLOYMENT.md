@@ -1,43 +1,57 @@
-# Web Deployment Guide
+# Deployment Guide
 
-## 📁 **Clean Web Structure**
+## File Structure for Web Server
 
-After reorganization, your web directory should contain only these essential files:
+Upload these files to your web server:
 
-### **Root Directory (upload to web server)**
 ```
-gemini-php-bridge/
+/
 ├── gemini-api.php          # Main API endpoint
-├── api.php                 # Compatibility redirect
-├── index.php              # Legacy endpoint
+├── simple-client.php       # PowerShell client
+├── get-client.php         # Client proxy
 ├── status.php             # Health check
+├── index.php              # Entry point
 ├── .htaccess              # Security rules
-├── LICENSE                # MIT license
-├── README.md              # Main documentation
 └── client/
-    └── gemini-bridge.ps1   # PowerShell client
+    └── gemini-bridge.ps1   # Full PowerShell client
 ```
 
-### **Required Directories**
+## Required Directories
 ```bash
-# Create these directories on your web server
 mkdir temp_files logs output
 chmod 755 temp_files logs output
 ```
 
-### **Optional Directories**
-```
-├── config/                # Configuration templates
-├── docs/                  # Documentation files
-└── unused/               # Development/backup files
+## Deployment Steps
+
+### 1. Upload Files
+Upload all files maintaining directory structure.
+
+### 2. Configure API Key
+Edit `gemini-api.php` line 13:
+```php
+define('GOOGLE_API_KEY', 'your-api-key-here');
 ```
 
-## 🚀 **Quick Deployment**
+### 3. Set Permissions
+```bash
+chmod 755 temp_files logs output
+chmod 644 *.php
+```
 
-### **1. Upload Core Files**
-Upload these files to your web server root:
-- `gemini-api.php` (main API)
-- `api.php` (redirect for compatibility)
+### 4. Test
+```bash
+curl -X POST https://yourdomain.com/gemini-api.php -d "test=true"
+```
+
+## Production Checklist
+
+- [ ] HTTPS enabled
+- [ ] API key configured
+- [ ] Directories writable
+- [ ] Error logging enabled
+- [ ] Rate limiting configured
+- [ ] Backup system in place
 - `index.php` (legacy support)
 - `status.php` (health check)
 - `.htaccess` (security)

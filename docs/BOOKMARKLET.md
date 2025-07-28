@@ -1,33 +1,36 @@
-# Browser Bookmarklet Integration
+# Browser Bookmarklet
 
-## 📖 **Browser Bookmarklet for Instant AI Access**
+Create a browser bookmark to process selected text with AI.
 
-Create a browser bookmark with this JavaScript code to instantly process selected text or prompt for input:
-
-### **Bookmarklet Code:**
+## Bookmarklet Code
 ```javascript
 javascript:(function(){
-    var text = window.getSelection().toString().trim() || prompt('Enter text to process with AI:');
-    if(text && text.length > 0) {
-        var ps1Cmd = `irm https://yourdomain.com/client/gemini-client.ps1 | iex -InputText "${text.replace(/"/g, '\\"').replace(/\n/g, '\\n')}"`;
-        if(navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(ps1Cmd).then(function() {
-                alert('✅ PowerShell command copied to clipboard!\n\nPaste and run in PowerShell:\n' + ps1Cmd);
-            }).catch(function() {
-                prompt('Copy this PowerShell command:', ps1Cmd);
+    var text = window.getSelection().toString().trim() || prompt('Enter text for AI:');
+    if(text) {
+        var cmd = `irm 'https://yourdomain.com/simple-client.php?text=${encodeURIComponent(text)}' | iex`;
+        if(navigator.clipboard) {
+            navigator.clipboard.writeText(cmd).then(() => {
+                alert('PowerShell command copied to clipboard!');
             });
         } else {
-            prompt('Copy this PowerShell command:', ps1Cmd);
+            prompt('Copy this command:', cmd);
         }
-    } else {
-        alert('No text selected or entered.');
     }
 })();
 ```
 
-### **How to Create the Bookmarklet:**
+## Setup
+1. Copy the JavaScript code above
+2. Create a new bookmark in your browser
+3. Replace "yourdomain.com" with your domain
+4. Paste the code as the URL
+5. Name it "AI Process"
 
-1. **Copy the JavaScript code** above (the entire `javascript:` line)
+## Usage
+1. Select text on any webpage
+2. Click the bookmark
+3. The PowerShell command is copied to clipboard
+4. Paste and run in PowerShell terminal
 2. **Create a new bookmark** in your browser
 3. **Set the name** to "AI Process Text" or similar
 4. **Set the URL** to the JavaScript code you copied

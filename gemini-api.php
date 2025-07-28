@@ -3,21 +3,25 @@
  * Gemini AI API Integration
  * Main endpoint for processing text and file uploads with Google's Gemini AI
  * 
- * @version 2.0
- * @author Your Name
+ * @version 2.1
+ * @author Gemini PHP Bridge Team
+ * @license MIT
  */
 
 // ========================================
-// CONFIGURATION - UPDATE THESE VALUES
+// CONFIGURATION CONSTANTS
 // ========================================
-$GOOGLE_API_KEY = "your-google-api-key-here";  // Update with your actual API key
-$BASE_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent";
+define('GOOGLE_API_KEY', 'your-google-api-key-here');  // Update with your actual API key
+define('BASE_API_URL', 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent');
+define('MAX_FILE_SIZE', '10M');
+define('MAX_INPUT_LENGTH', 100000);
+define('RATE_LIMIT_PER_MINUTE', 60);
 
 // Configuration array
 $config = [
     'api' => [
-        'key' => $GOOGLE_API_KEY,
-        'endpoint' => $BASE_API_URL,
+        'key' => GOOGLE_API_KEY,
+        'endpoint' => BASE_API_URL,
         'model' => 'gemini-2.0-flash-exp'
     ],
     'generation' => [
@@ -29,7 +33,7 @@ $config = [
     ],
     'upload' => [
         'temp_dir' => 'temp_files',
-        'max_file_size' => '10M',
+        'max_file_size' => MAX_FILE_SIZE,
         'allowed_extensions' => ['txt', 'pdf', 'docx', 'md'],
         'cleanup_after_hours' => 24
     ],
@@ -41,17 +45,17 @@ $config = [
     ],
     'security' => [
         'ssl_verify' => true,
-        'rate_limit_requests_per_minute' => 60,
-        'max_input_length' => 100000
+        'rate_limit_requests_per_minute' => RATE_LIMIT_PER_MINUTE,
+        'max_input_length' => MAX_INPUT_LENGTH
     ]
 ];
 
 // Initialize logging
 class Logger {
-    private $logFile;
-    private $enabled;
+    private string $logFile;
+    private bool $enabled;
     
-    public function __construct($config) {
+    public function __construct(array $config) {
         $this->logFile = $config['logging']['file'];
         $this->enabled = $config['logging']['enabled'];
         
@@ -62,7 +66,7 @@ class Logger {
         }
     }
     
-    public function log($level, $message) {
+    public function log(string $level, string $message): void {
         if (!$this->enabled) return;
         
         $timestamp = date('Y-m-d H:i:s');
@@ -70,10 +74,10 @@ class Logger {
         file_put_contents($this->logFile, $logMessage, FILE_APPEND | LOCK_EX);
     }
     
-    public function debug($message) { $this->log('DEBUG', $message); }
-    public function info($message) { $this->log('INFO', $message); }
-    public function warning($message) { $this->log('WARNING', $message); }
-    public function error($message) { $this->log('ERROR', $message); }
+    public function debug(string $message): void { $this->log('DEBUG', $message); }
+    public function info(string $message): void { $this->log('INFO', $message); }
+    public function warning(string $message): void { $this->log('WARNING', $message); }
+    public function error(string $message): void { $this->log('ERROR', $message); }
 }
 
 $logger = new Logger($config);
@@ -82,7 +86,7 @@ $logger->info("Request received: " . $_SERVER['REQUEST_METHOD'] . " " . $_SERVER
 /**
  * API Response Helper
  */
-function sendResponse($data, $statusCode = 200) {
+function sendResponse(array $data, int $statusCode = 200): void {
     http_response_code($statusCode);
     header('Content-Type: application/json');
     echo json_encode($data);
@@ -92,7 +96,7 @@ function sendResponse($data, $statusCode = 200) {
 /**
  * Error Handler
  */
-function handleError($message, $statusCode = 400) {
+function handleError(string $message, int $statusCode = 400): void {
     global $logger;
     $logger->error($message);
     sendResponse(['error' => $message], $statusCode);
