@@ -115,12 +115,11 @@ gemini-php-bridge/
 ├── status.php             # Health check endpoint
 ├── client/
 │   └── gemini-bridge.ps1   # PowerShell client
-├── temp_files/            # File uploads
-├── logs/                  # Request logs
-├── output/                # Generated outputs
+├── temp_files/            # File uploads (create manually)
+├── logs/                  # Request logs (create manually)
+├── output/                # Generated outputs (create manually)
 ├── config/                # Config templates (optional)
 ├── docs/                  # Documentation
-├── unused/                # Old/deprecated files
 └── .htaccess             # Web server security
 ```
 
