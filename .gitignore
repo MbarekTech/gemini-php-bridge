@@ -17,6 +17,13 @@ php_debug.log
 .env
 .env.local
 
+# Backup and temporary files
+*.bak
+*.backup
+*.tmp
+*.temp
+*~
+
 # Development and build files
 node_modules/
 dist/
@@ -28,6 +35,25 @@ build/
 *.swp
 *.swo
 *.sublime-*
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Archive files
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# PHP specific
+composer.phar
+vendor/
 
 # OS files
 .DS_Store

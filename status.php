@@ -1,10 +1,19 @@
 <?php
 /**
- * Version and Status Check Endpoint
+ * System Health Check Endpoint
  * Usage: curl https://yourdomain.com/status.php
+ * @version 2.1
  */
 
 header('Content-Type: application/json');
+header('Cache-Control: no-cache, must-revalidate');
+
+// Security check - only allow GET requests
+if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+    http_response_code(405);
+    echo json_encode(['error' => 'Method not allowed']);
+    exit;
+}
 
 // Load configuration if available
 $config = null;

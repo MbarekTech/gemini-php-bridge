@@ -15,8 +15,18 @@ $currentDir = dirname($_SERVER['REQUEST_URI']);
 $apiUrl = $protocol . '://' . $domain . $currentDir . '/gemini-api.php';
 
 // Check if parameters are passed via URL
-$text = isset($_GET['text']) ? $_GET['text'] : '';
+$text = isset($_GET['text']) ? trim($_GET['text']) : '';
 $test = isset($_GET['test']) ? true : false;
+
+// Input validation and sanitization
+if (!empty($text)) {
+    // Limit text length for security
+    if (strlen($text) > 10000) {
+        $text = substr($text, 0, 10000);
+    }
+    // Escape special characters for PowerShell
+    $text = str_replace(['"', '`', '$'], ['""', '``', '`$'], $text);
+}
 
 // Simple PowerShell client that works with iex
 echo <<<POWERSHELL

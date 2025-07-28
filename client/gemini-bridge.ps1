@@ -1,7 +1,8 @@
 # Gemini PHP Bridge - PowerShell Client
-# Version 2.0 - Remote execution with embedded configuration
+# Version 2.1 - Enhanced with better error handling and validation
 # Usage: irm https://yourdomain.com/client/gemini-bridge.ps1 | iex -InputText "Your prompt here"
 
+[CmdletBinding()]
 param(
     [string]$ApiUrl = "",
     [string]$InputFile = "",
@@ -10,6 +11,9 @@ param(
     [switch]$Test = $false,
     [switch]$Verbose = $false
 )
+
+# Set error action preference
+$ErrorActionPreference = "Stop"
 
 # ========================================
 # CONFIGURATION - UPDATE THESE VALUES

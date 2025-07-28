@@ -17,6 +17,12 @@ define('MAX_FILE_SIZE', '10M');
 define('MAX_INPUT_LENGTH', 100000);
 define('RATE_LIMIT_PER_MINUTE', 60);
 
+// Validate critical configuration
+if (GOOGLE_API_KEY === 'your-google-api-key-here' || empty(GOOGLE_API_KEY)) {
+    http_response_code(500);
+    die(json_encode(['error' => 'Google API key not configured. Please edit gemini-api.php line 14.']));
+}
+
 // Configuration array
 $config = [
     'api' => [
