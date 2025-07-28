@@ -20,7 +20,7 @@ if (file_exists($scriptPath)) {
     $script = file_get_contents($scriptPath);
     
     // Update the default API URL in the script to point to this server
-    $domain = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'mycafe.tech';
+    $domain = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'yourdomain.com';
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http';
     $baseUrl = $protocol . '://' . $domain . dirname($_SERVER['REQUEST_URI']);
     

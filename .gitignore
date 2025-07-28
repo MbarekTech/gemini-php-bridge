@@ -6,6 +6,7 @@ config/local.php
 temp_files/
 output/
 logs/
+unused/
 
 # Log files
 *.log

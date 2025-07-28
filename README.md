@@ -1,6 +1,22 @@
 # Gemini PHP Bridge
 
-A professional PHP web service that connects to Google's Gemini AI API. Upload text files or send content directly to get AI-generated responses. Built for easy web deployment and one-line remote execution.
+A professional PHP web service that conn```powershell
+# 🆕 SIMPLE METHOD (Recommended - works with any security!)
+irm 'https://yourdomain.com/simple-client.php?test=1' | iex
+irm 'https://yourdomain.com/simple-client.php?text=Explain quantum computing' | iex
+
+# Easy function wrapper
+function AI { param([string]$prompt); irm "https://yourdomain.com/simple-client.php?text=$prompt" | iex }
+AI "Write a Python hello world"
+
+# Direct API Function (most reliable for scripts)
+function Invoke-GeminiAI { 
+    param([string]$Text)
+    $response = Invoke-WebRequest -Uri "https://yourdomain.com/gemini-api.php" -Method POST -Body $Text -ContentType "text/plain"
+    ($response.Content | ConvertFrom-Json).candidates[0].content.parts[0].text
+}
+Invoke-GeminiAI "Create a simple HTML page"
+```Gemini AI API. Upload text files or send content directly to get AI-generated responses. Built for easy web deployment and one-line remote execution.
 
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-777BB4?logo=php)](https://php.net)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
@@ -37,14 +53,15 @@ A professional PHP web service that connects to Google's Gemini AI API. Upload t
 That's it. Users can now run commands like:
 
 ```powershell
-# Test connection
-irm https://yourdomain.com/client/gemini-bridge.ps1 | iex -Test
+# 🚀 SIMPLE ONE-LINER (Works with security layers!)
+irm 'https://yourdomain.com/simple-client.php?text=Create a Python web scraper' | iex
 
-# Process text
-irm https://yourdomain.com/client/gemini-bridge.ps1 | iex -InputText "Create a Python web scraper"
+# Test connection  
+irm 'https://yourdomain.com/simple-client.php?test=1' | iex
 
-# Process file
-irm https://yourdomain.com/client/gemini-bridge.ps1 | iex -InputFile "myfile.txt"
+# Create a simple AI function
+function AI { param([string]$prompt); irm "https://yourdomain.com/simple-client.php?text=$prompt" | iex }
+AI "Write a JavaScript function"
 ```
 
 ### For local development
@@ -61,17 +78,21 @@ php -S localhost:8000
 ### PowerShell (Windows/Linux/macOS)
 
 ```powershell
-# Quick test
-irm https://yourdomain.com/client/gemini-bridge.ps1 | iex -Test
+# 🆕 SIMPLE METHOD (Recommended - works with any security!)
+irm 'https://yourdomain.com/simple-client.php?test=1' | iex
+irm 'https://yourdomain.com/simple-client.php?text=Explain quantum computing' | iex
 
-# Process some text
-irm https://yourdomain.com/client/gemini-bridge.ps1 | iex -InputText "Explain quantum computing"
+# Easy function wrapper
+function AI { param([string]$prompt); irm "https://yourdomain.com/simple-client.php?text=$prompt" | iex }
+AI "Write a Python hello world"
 
-# Process your clipboard
-irm https://yourdomain.com/client/gemini-bridge.ps1 | iex -InputText "$(Get-Clipboard)"
-
-# Process a local file
-irm https://yourdomain.com/client/gemini-bridge.ps1 | iex -InputFile "README.md"
+# Direct API Function (most reliable for scripts)
+function Invoke-GeminiAI { 
+    param([string]$Text)
+    $response = Invoke-WebRequest -Uri "https://yourdomain.com/gemini-api.php" -Method POST -Body $Text -ContentType "text/plain"
+    ($response.Content | ConvertFrom-Json).candidates[0].content.parts[0].text
+}
+Invoke-GeminiAI "Create a simple HTML page"
 ```
 
 ### Direct API calls
