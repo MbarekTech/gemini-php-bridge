@@ -13,6 +13,19 @@
 <Files "*.ps1">
     Header set Content-Type "text/plain; charset=utf-8"
     Header set Content-Disposition "inline"
+    Header set Access-Control-Allow-Origin "*"
+    Header set Cache-Control "no-cache, must-revalidate"
+</Files>
+
+# Allow PHP client endpoints
+<Files "get-client.php">
+    Header set Content-Type "text/plain; charset=utf-8"
+    Header set Access-Control-Allow-Origin "*"
+</Files>
+
+<Files "simple-client.php">
+    Header set Content-Type "text/plain; charset=utf-8"
+    Header set Access-Control-Allow-Origin "*"
 </Files>
 
 # Security headers
