@@ -1,0 +1,35 @@
+# Configuration files (contains API keys)
+config/config.php
+
+# Generated content and temporary files
+temp_files/
+output/
+logs/
+
+# Log files
+*.log
+
+# Environment files
+.env
+.env.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# PHP specific
+vendor/
+composer.lock
+
+# Cache files (if implemented)
+cache/
+
+# Backup files
+*.bak
+*.backup

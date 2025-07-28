@@ -1,0 +1,67 @@
+# Define the URL to the PHP script
+$phpApiUrl = "http://aska.website/a/api_handler.php"
+
+# Define the source and destination folders
+$srcFolder = "src"
+$destFolder = "src2"
+
+# Create the destination folder if it doesn't exist
+if (-not (Test-Path $destFolder)) {
+    New-Item -ItemType Directory -Path $destFolder
+}
+
+# Function to call the PHP script and process files
+function Invoke-AIStudioAPI {
+    param (
+        [string]$content
+    )
+    try {
+        # Convert the content to bytes
+        $contentBytes = [System.Text.Encoding]::UTF8.GetBytes($content)
+
+        # Send the content to the PHP script
+        $response = Invoke-WebRequest -Uri $phpApiUrl -Method Post -Body $contentBytes -ContentType "text/plain; charset=utf-8"
+
+        # Parse the response
+        $responseJson = $response.Content | ConvertFrom-Json
+        if ($responseJson.candidates -and $responseJson.candidates[0].content -and $responseJson.candidates[0].content.parts) {
+            return $responseJson.candidates[0].content.parts[0].text
+        } else {
+            Write-Host "Error: Could not extract text from response"
+            return $content # Return the original content if the API fails
+        }
+    } catch {
+        Write-Host "Failed to process file with PHP: $_"
+        return $content # Return the original content if the API fails
+    }
+}
+
+# Traverse the src folder and process .ts and .html files
+Get-ChildItem -Path $srcFolder -Recurse -Include *.ts, *.html | ForEach-Object {
+    $filePath = $_.FullName
+    $relativePath = $_.FullName.Substring((Resolve-Path $srcFolder).Path.Length + 1)
+    $destPath = Join-Path $destFolder $relativePath
+
+    # Create the destination directory if it doesn't exist
+    $destDir = Split-Path $destPath -Parent
+    if (-not (Test-Path $destDir)) {
+        New-Item -ItemType Directory -Path $destDir
+    }
+
+    # Read the file content
+    $content = Get-Content -Path $filePath -Raw
+
+    # Send the content to the AI Studio API via the PHP script
+    $newContent = Invoke-AIStudioAPI -content $content
+
+    # Write the modified content to the destination file
+    Set-Content -Path $destPath -Value $newContent
+
+    Write-Host "Processed: $filePath -> $destPath"
+}
+
+Write-Host "All files processed and saved to $destFolder"
+
+# Keep the terminal open
+Write-Host "Press any key to exit..."
+$null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")

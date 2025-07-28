@@ -1,0 +1,33 @@
+# Security rules for Gemini AI Integration
+
+# Deny access to configuration files
+<Files "config.php">
+    Require all denied
+</Files>
+
+<Files "*.log">
+    Require all denied
+</Files>
+
+# Allow PowerShell scripts to be downloaded with correct content type
+<Files "*.ps1">
+    Header set Content-Type "text/plain; charset=utf-8"
+    Header set Content-Disposition "inline"
+</Files>
+
+# Security headers
+Header always set X-Content-Type-Options nosniff
+Header always set X-Frame-Options DENY
+Header always set X-XSS-Protection "1; mode=block"
+
+# Optional: Force HTTPS (uncomment if you have SSL)
+# RewriteEngine On
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Prevent directory browsing
+Options -Indexes
+
+# Limit file upload size (adjust as needed)
+php_value upload_max_filesize 10M
+php_value post_max_size 10M
