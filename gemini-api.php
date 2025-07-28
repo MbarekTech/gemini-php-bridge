@@ -1,12 +1,17 @@
 <?php
 /**
- * Gemini PHP Bridge - API Redirect
- * Redirects to gemini-api.php for better web organization
+ * Gemini AI API Integration
+ * Main endpoint for processing text and file uploads with Google's Gemini AI
+ * 
+ * @version 2.0
+ * @author Your Name
  */
 
-// Include the main API functionality
-require_once 'gemini-api.php';
-?>
+// ========================================
+// CONFIGURATION - UPDATE THESE VALUES
+// ========================================
+$GOOGLE_API_KEY = "your-google-api-key-here";  // Update with your actual API key
+$BASE_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent";
 
 // Configuration array
 $config = [

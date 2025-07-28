@@ -1,6 +1,6 @@
-# PowerShell Client for Gemini AI Integration
-# Version 2.0 - Remote execution with embedded API configuration
-# Usage: irm https://yourdomain.com/client/gemini-client.ps1 | iex -InputText "Your prompt here"
+# Gemini PHP Bridge - PowerShell Client
+# Version 2.0 - Remote execution with embedded configuration
+# Usage: irm https://yourdomain.com/client/gemini-bridge.ps1 | iex -InputText "Your prompt here"
 
 param(
     [string]$ApiUrl = "",
@@ -14,8 +14,8 @@ param(
 # ========================================
 # CONFIGURATION - UPDATE THESE VALUES
 # ========================================
-$DEFAULT_API_URL = "https://yourdomain.com/api.php"  # Update with your domain
-$GOOGLE_API_KEY = "AIzaSyAJWYKKkaXOmQpaJWbPYmXu6NavEFdKJJY"  # Update with your actual API key
+$DEFAULT_API_URL = "https://yourdomain.com/gemini-api.php"  # Update with your domain
+$GOOGLE_API_KEY = "your-google-api-key-here"  # Update with your actual API key
 
 # Use provided API URL or default
 if ([string]::IsNullOrEmpty($ApiUrl)) {

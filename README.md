@@ -1,6 +1,6 @@
-# Gemini AI Integration
+# Gemini PHP Bridge
 
-A simple PHP web service that connects to Google's Gemini AI API. Upload text files or send content directly to get AI-generated responses. Built for easy deployment and one-line remote execution.
+A professional PHP web service that connects to Google's Gemini AI API. Upload text files or send content directly to get AI-generated responses. Built for easy web deployment and one-line remote execution.
 
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-777BB4?logo=php)](https://php.net)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
@@ -18,9 +18,9 @@ A simple PHP web service that connects to Google's Gemini AI API. Upload text fi
 ### For web hosting (recommended)
 
 1. **Edit the API key** in these files:
-   - `api.php` (line 11): `$GOOGLE_API_KEY = "your-key-here";`
-   - `client/gemini-client.ps1` (line 14): `$GOOGLE_API_KEY = "your-key-here";`
-   - `client/gemini-client.ps1` (line 13): Update domain URL
+   - `gemini-api.php` (line 11): `$GOOGLE_API_KEY = "your-key-here";`
+   - `client/gemini-bridge.ps1` (line 16): `$GOOGLE_API_KEY = "your-key-here";`
+   - `client/gemini-bridge.ps1` (line 15): Update domain URL
 
 2. **Upload files** to your web server
 
@@ -31,20 +31,20 @@ A simple PHP web service that connects to Google's Gemini AI API. Upload text fi
 
 4. **Test it works**:
    ```bash
-   curl -X POST https://yourdomain.com/api.php -d "test=true"
+   curl -X POST https://yourdomain.com/gemini-api.php -d "test=true"
    ```
 
 That's it. Users can now run commands like:
 
 ```powershell
 # Test connection
-irm https://yourdomain.com/client/gemini-client.ps1 | iex -Test
+irm https://yourdomain.com/client/gemini-bridge.ps1 | iex -Test
 
 # Process text
-irm https://yourdomain.com/client/gemini-client.ps1 | iex -InputText "Create a Python web scraper"
+irm https://yourdomain.com/client/gemini-bridge.ps1 | iex -InputText "Create a Python web scraper"
 
 # Process file
-irm https://yourdomain.com/client/gemini-client.ps1 | iex -InputFile "myfile.txt"
+irm https://yourdomain.com/client/gemini-bridge.ps1 | iex -InputFile "myfile.txt"
 ```
 
 ### For local development
@@ -62,31 +62,31 @@ php -S localhost:8000
 
 ```powershell
 # Quick test
-irm https://yourdomain.com/client/gemini-client.ps1 | iex -Test
+irm https://yourdomain.com/client/gemini-bridge.ps1 | iex -Test
 
 # Process some text
-irm https://yourdomain.com/client/gemini-client.ps1 | iex -InputText "Explain quantum computing"
+irm https://yourdomain.com/client/gemini-bridge.ps1 | iex -InputText "Explain quantum computing"
 
 # Process your clipboard
-irm https://yourdomain.com/client/gemini-client.ps1 | iex -InputText "$(Get-Clipboard)"
+irm https://yourdomain.com/client/gemini-bridge.ps1 | iex -InputText "$(Get-Clipboard)"
 
 # Process a local file
-irm https://yourdomain.com/client/gemini-client.ps1 | iex -InputFile "README.md"
+irm https://yourdomain.com/client/gemini-bridge.ps1 | iex -InputFile "README.md"
 ```
 
 ### Direct API calls
 
 ```bash
 # Test
-curl -X POST https://yourdomain.com/api.php -d "test=true"
+curl -X POST https://yourdomain.com/gemini-api.php -d "test=true"
 
 # Send text
-curl -X POST https://yourdomain.com/api.php \
+curl -X POST https://yourdomain.com/gemini-api.php \
   -H "Content-Type: text/plain" \
   -d "Write a JavaScript function to sort an array"
 
 # Upload file
-curl -X POST https://yourdomain.com/api.php \
+curl -X POST https://yourdomain.com/gemini-api.php \
   -F "textFile=@document.txt"
 ```
 
@@ -98,7 +98,7 @@ Create a bookmark with this JavaScript to process selected text:
 javascript:(function(){
     var text = window.getSelection().toString() || prompt('Enter text:');
     if(text) {
-        var cmd = 'irm https://yourdomain.com/client/gemini-client.ps1 | iex -InputText "' + text + '"';
+        var cmd = 'irm https://yourdomain.com/client/gemini-bridge.ps1 | iex -InputText "' + text + '"';
         navigator.clipboard.writeText(cmd);
         alert('Command copied! Paste in PowerShell.');
     }
@@ -109,35 +109,39 @@ javascript:(function(){
 
 ```
 gemini-php-bridge/
-├── api.php                 # Main API endpoint
+├── gemini-api.php          # Main API endpoint
+├── api.php                 # API redirect (for compatibility)
 ├── index.php              # Legacy endpoint  
+├── status.php             # Health check endpoint
 ├── client/
-│   └── gemini-client.ps1   # PowerShell client
+│   └── gemini-bridge.ps1   # PowerShell client
 ├── temp_files/            # File uploads
 ├── logs/                  # Request logs
+├── output/                # Generated outputs
 ├── config/                # Config templates (optional)
-├── unused/                # Old files
-└── docs/                  # Additional documentation
+├── docs/                  # Documentation
+├── unused/                # Old/deprecated files
+└── .htaccess             # Web server security
 ```
 
 ## Configuration
 
 The API key is embedded directly in the script files for simplicity. For development, you can also use the config files in the `config/` folder.
 
-**Main settings** (in api.php):
+**Main settings** (in gemini-api.php):
 - Google API key
 - Model parameters (temperature, max tokens)
 - File upload limits
 - Logging preferences
 
-**Client settings** (in gemini-client.ps1):
+**Client settings** (in gemini-bridge.ps1):
 - Default API URL
 - Output directory
 - Logging preferences
 
 ## API reference
 
-### POST /api.php
+### POST /gemini-api.php
 
 **Parameters:**
 - `textFile`: Upload a text file
@@ -205,12 +209,12 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 **Local testing:**
 ```bash
 php -S localhost:8000
-curl -X POST http://localhost:8000/api.php -d "test=true"
+curl -X POST http://localhost:8000/gemini-api.php -d "test=true"
 ```
 
 **Adding features:**
-- Edit `api.php` for server-side changes
-- Edit `client/gemini-client.ps1` for client features
+- Edit `gemini-api.php` for server-side changes
+- Edit `client/gemini-bridge.ps1` for client features
 - Use the `config/` templates for complex setups
 
 ## Contributing
@@ -226,9 +230,9 @@ MIT License - see [LICENSE](LICENSE) file.
 
 ## More info
 
-- [Simple setup guide](SIMPLE_SETUP.md) - Quick deployment
-- [Web hosting guide](WEB_HOSTING.md) - Detailed deployment
-- [Bookmarklet guide](BOOKMARKLET.md) - Browser integration
+- [Simple setup guide](docs/SIMPLE_SETUP.md) - Quick deployment
+- [Web hosting guide](docs/WEB_HOSTING.md) - Detailed deployment
+- [Bookmarklet guide](docs/BOOKMARKLET.md) - Browser integration
 - [Google AI docs](https://ai.google.dev/docs) - API reference
 
 ---
