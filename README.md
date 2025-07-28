@@ -50,8 +50,8 @@ irm https://yourdomain.com/client/gemini-client.ps1 | iex -InputFile "myfile.txt
 ### For local development
 
 ```bash
-git clone https://github.com/yourusername/gemini-ai-integration.git
-cd gemini-ai-integration
+git clone https://github.com/MbarekTech/gemini-php-bridge.git
+cd gemini-php-bridge
 # Edit config files with your API key
 php -S localhost:8000
 ```
@@ -108,7 +108,7 @@ javascript:(function(){
 ## File structure
 
 ```
-gemini-ai-integration/
+gemini-php-bridge/
 ├── api.php                 # Main API endpoint
 ├── index.php              # Legacy endpoint  
 ├── client/
